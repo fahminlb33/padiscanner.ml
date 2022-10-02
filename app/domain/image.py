@@ -23,7 +23,7 @@ container_client: ContainerClient = blob_service_client.get_container_client(set
 
 # load model
 predictor_service = PredictorService()
-predictor_service.load_model(settings.model_path, settings.class_name_path)
+predictor_service.load_model(settings.model_path, settings.class_names_path)
 
 logger = logging.getLogger(__name__)
 
