@@ -27,6 +27,13 @@ predictor_service.load_model(settings.model_path, settings.class_name_path)
 
 logger = logging.getLogger(__name__)
 
+def safe_delete(path: str):
+    try:
+        os.remove(path)
+    except Exception as e:
+        logger.error("Error deleting file: %s", e)
+        logger.error(e)
+
 class ImageModel(BaseModel):
     user_id: str
     prediction_id: str
@@ -86,6 +93,15 @@ async def get_graph(model: ImageModel, _: str = Depends(get_current_username)):
 
         # set to response dict
         response_dict[key] = heatmap_blob_client.url
+
+        # delete temp file
+        safe_delete(path)
+
+    # delete original file
+    safe_delete(local_filepath)
+
+    # delete resized file
+    safe_delete(resized_path)
 
     # return data
     return response_dict
