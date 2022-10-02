@@ -1,4 +1,4 @@
-FROM tensorflow/tensorflow:2.8.1
+FROM tensorflow/tensorflow:2.10.0
 
 ARG MODEL_URL
 ARG CLASS_NAMES_URL
