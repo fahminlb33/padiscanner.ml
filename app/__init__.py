@@ -104,15 +104,24 @@ def get_current_username(credentials: HTTPBasicCredentials = Depends(security), 
 
 @app.middleware("http")
 async def opencensus_trace(request: Request, call_next):
+    # create tracer
     tracer = Tracer(exporter=exporter, sampler=sampler)
+
+    # start new span
     with tracer.span("main") as span:
         span.span_kind = SpanKind.SERVER
 
+        # call next middleware
         response = await call_next(request)
 
-        tracer.add_attribute_to_current_span(attribute_key="name", attribute_value=f"{request.method.upper()} {request.url}")
-        tracer.add_attribute_to_current_span(attribute_key=HTTP_STATUS_CODE, attribute_value=response.status_code)
+        # add attributes
         tracer.add_attribute_to_current_span(attribute_key=HTTP_URL, attribute_value=str(request.url))
+        tracer.add_attribute_to_current_span(attribute_key=HTTP_STATUS_CODE, attribute_value=response.status_code)
+        tracer.add_attribute_to_current_span(attribute_key="name", attribute_value=f"{request.method.upper()} {request.url}")
+
+        # add traceparent attribute to propagate trace context
+        tracer.add_attribute_to_current_span(attribute_key="traceparent", attribute_value=request.headers.get("traceparent"))
+        response.headers["traceparent"] = request.headers.get("traceparent")
 
     return response
 
