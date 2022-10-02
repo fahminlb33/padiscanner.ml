@@ -30,6 +30,9 @@ jobs:
         push: true
         tags: ${{ env.DOCKER_IMAGE_NAME }}
         file: ./Dockerfile
+        build-args: |
+          MODEL_URL=${{ secrets.MODEL_URL }}
+          CLASS_NAMES_URL=${{ secrets.CLASS_NAMES_URL }}
     - name: Deploy to Azure Web App 
       uses: azure/webapps-deploy@v2
       with:
