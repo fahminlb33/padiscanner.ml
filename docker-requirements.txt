@@ -1,0 +1,8 @@
+python-multipart==0.0.5
+uvicorn==0.17.5
+fastapi==0.75.0
+aiofiles==0.8.0
+jinja2==3.0.3
+joblib==1.1.0
+matplotlib==3.5.1
+scikit-image==0.18.3
