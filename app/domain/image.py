@@ -89,7 +89,7 @@ async def get_graph(model: ImageModel, _: str = Depends(get_current_username)):
         # open read stream
         with open(path, "rb") as data:
             # upload
-            heatmap_blob_client.upload_blob(data)
+            heatmap_blob_client.upload_blob(data, overwrite=True)
 
         # set to response dict
         response_dict[key] = heatmap_blob_client.url
