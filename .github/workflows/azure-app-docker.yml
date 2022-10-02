@@ -5,6 +5,7 @@ env:
   DOCKER_IMAGE_NAME: ghcr.io/fahminlb33/padiscanner.ml:latest
 
 on:
+  workflow_dispatch:
   push:
     branches: [ "master" ]
 
