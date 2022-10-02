@@ -28,12 +28,11 @@ class PredictorService:
     def load_model(self, tf_name: str, class_name: str) -> None:
         # create model path using absolute path
         model_path = os.path.abspath(tf_name)
-        name_path = os.path.abspath(class_name)
-        print(model_path)
+        names_path = os.path.abspath(class_name)
 
         # load the model
         self.tf_model = load_model(model_path)
-        self.class_names = joblib.load(name_path)
+        self.class_names = joblib.load(names_path)
         self.initialized = True
 
     def constrain_image_size(self, img_path: str) -> str:

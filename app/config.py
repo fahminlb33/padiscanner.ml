@@ -11,5 +11,5 @@ class Settings(BaseSettings):
     auth_basic_password: str = "fahmi"
 
     model_path: str = "tensorflow.h5"
-    class_name_path: str = "class_names.z"
+    class_names_path: str = "class_names.z"
 
