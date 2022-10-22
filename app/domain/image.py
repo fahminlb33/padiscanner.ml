@@ -39,8 +39,7 @@ class ImageModel(BaseModel):
     prediction_id: str
     original_filename: str
 
-@router.post("/image")
-async def get_graph(model: ImageModel, _: str = Depends(get_current_username)):
+async def analyze_image(model: ImageModel, _: str = Depends(get_current_username)):
     # load image from blob storage
     local_filepath = os.path.join(tempfile.gettempdir(), model.original_filename)
     with open(local_filepath, "wb") as f:
