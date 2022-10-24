@@ -120,9 +120,10 @@ async def opencensus_trace(request: Request, call_next):
         tracer.add_attribute_to_current_span(attribute_key="name", attribute_value=f"{request.method.upper()} {request.url}")
 
         # add traceparent attribute to propagate trace context
-        tracer.add_attribute_to_current_span(attribute_key="traceparent", attribute_value=request.headers.get("traceparent"))
         if "traceparent" in request.headers:
-            response.headers["traceparent"] = request.headers.get("traceparent")
+            trace_parent = request.headers.get("traceparent")
+            response.headers["traceparent"] = trace_parent
+            tracer.add_attribute_to_current_span(attribute_key="traceparent", attribute_value=trace_parent)
 
     return response
 
