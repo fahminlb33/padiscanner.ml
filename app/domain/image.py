@@ -59,7 +59,7 @@ async def analyze_image(model: ImageModel, _: str = Depends(get_current_username
 
     # make prediction
     logger.info(f"Running prediction...")
-    (prediction_proba, heatmap_path, superimposed_path, masked_path) \
+    (prediction_proba, heatmap_path, superimposed_path, masked_path, severity) \
         = predictor_service.predict(resized_path, tempfile.gettempdir())
 
     # upload to blob storage
@@ -68,6 +68,7 @@ async def analyze_image(model: ImageModel, _: str = Depends(get_current_username
     
     # build response
     response_dict = {
+        "severity": severity,
         "predicted_class": predictor_service.get_most_likely_class(prediction_proba),
         "class_probabilities": {
             predictor_service.get_class_from_prediction(i): round(v, 4) for i, v in enumerate(prediction_proba.tolist())

@@ -136,6 +136,10 @@ class PredictorService:
 
         self.logger.info(f"Predicted: {prediction}")
         return (prediction, gradcam)
+    
+    def calculate_severity(self, heatmap: np.ndarray) -> float:
+        # calculate severity
+        return np.mean(heatmap) / 255.0
 
     def predict(self, image_path: str, output_path: str) -> Tuple[str, str, str, str]:
         if not self.initialized:
@@ -173,11 +177,16 @@ class PredictorService:
         masked_img = array_to_img(masked_arr)
         masked_img.save(masked_path)
 
+        # calculate severity
+        self.logger.info(f"Calculating severity...")
+        severity = self.calculate_severity(heatmap_arr)
+
         return (
             predicted,
             heatmap_path,
             superimposed_path,
-            masked_path
+            masked_path,
+            severity,
         )
     
     def get_most_likely_class(self, prediction: np.ndarray) -> str:
